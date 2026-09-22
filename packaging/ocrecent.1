@@ -1,6 +1,6 @@
 .TH OCRECENT 1 "September 2026" "ocrecent 0.1.0" "User Commands"
 .SH NAME
-ocrecent \- resume recent OpenCode sessions after a reboot
+ocrecent \- list recent OpenCode sessions after a reboot
 .SH SYNOPSIS
 .B ocrecent
 [\fIflags\fR]
@@ -10,8 +10,10 @@ ocrecent \- resume recent OpenCode sessions after a reboot
 .SH DESCRIPTION
 .B ocrecent
 reads the OpenCode SQLite store, ranks sessions by update time, and hands
-the newest ones to a picker, a notification, or a direct resume. With no
-command and a TTY it opens the picker; otherwise it lists.
+the newest ones to a list, picker, notification, or direct resume. It lists
+by default; use
+.B \-\-launch
+to pick and launch from the root command.
 .PP
 Resume runs
 .B opencode <directory> \-\-session <id>
@@ -25,13 +27,13 @@ List recent sessions.
 List recent projects (sessions collapsed by worktree).
 .TP
 .B pick
-Pick a session with the picker and resume it.
+List sessions, or pick and launch with \fB\-\-launch\fR.
 .TP
 .B resume <id|index>
 Resume a session by id or listing index.
 .TP
 .B last
-Resume the most recent session.
+List the most recent session, or launch it with \fB\-\-launch\fR.
 .TP
 .B print <id|index>
 Print the resume command for a session.
@@ -47,6 +49,9 @@ Remove them.
 .TP
 .B doctor
 Diagnose store, picker, and environment.
+.TP
+.B config set <key> <value>
+Update and write one supported configuration value.
 .SH FLAGS
 .TP
 .BI \-n ", " \-\-max " N"
@@ -75,6 +80,9 @@ Only sessions in DIR (or descendants).
 .TP
 .BI \-\-db " PATH"
 Extra database path (repeatable).
+.TP
+.B \-\-launch
+Launch the selected session instead of listing it (root, pick, and last).
 .SH ENVIRONMENT
 .TP
 .B OPENCODE_DATA

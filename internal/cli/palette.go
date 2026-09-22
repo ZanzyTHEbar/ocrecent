@@ -36,5 +36,6 @@ func palette(params *CmdParams) []*cobra.Command {
 		newInstallCmd(params),
 		newUninstallCmd(params),
 		newDoctorCmd(params),
+		newConfigCmd(params),
 	}
 }

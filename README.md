@@ -48,6 +48,7 @@ ocrecent last --launch           # launch the newest session
 ocrecent print ses_...           # print the resume command
 ocrecent notify                  # show the notification actions
 ocrecent doctor                  # diagnose data and desktop integration
+ocrecent config set picker fzf   # persist a config value
 ```
 
 Common flags:
@@ -83,6 +84,10 @@ children = false
 archived = false
 notify_urgency = "normal"
 ```
+
+Persist supported values with `ocrecent config set <key> <value>`. Supported
+keys are `n`, `picker`, `terminal`, `children`, `archived`, and
+`notify_urgency`.
 
 Environment overrides:
 

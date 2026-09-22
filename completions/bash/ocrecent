@@ -360,6 +360,75 @@ __ocrecent_handle_word()
     __ocrecent_handle_word
 }
 
+_ocrecent_config_set()
+{
+    last_command="ocrecent_config_set"
+
+    command_aliases=()
+
+    commands=()
+
+    flags=()
+    two_word_flags=()
+    local_nonpersistent_flags=()
+    flags_with_completion=()
+    flags_completion=()
+
+    flags+=("--all")
+    flags+=("--archived")
+    flags+=("--children")
+    flags+=("--db=")
+    two_word_flags+=("--db")
+    flags+=("--dir=")
+    two_word_flags+=("--dir")
+    flags+=("--json")
+    flags+=("--max=")
+    two_word_flags+=("--max")
+    two_word_flags+=("-n")
+    flags+=("--picker=")
+    two_word_flags+=("--picker")
+    flags+=("--projects")
+
+    must_have_one_flag=()
+    must_have_one_noun=()
+    noun_aliases=()
+}
+
+_ocrecent_config()
+{
+    last_command="ocrecent_config"
+
+    command_aliases=()
+
+    commands=()
+    commands+=("set")
+
+    flags=()
+    two_word_flags=()
+    local_nonpersistent_flags=()
+    flags_with_completion=()
+    flags_completion=()
+
+    flags+=("--all")
+    flags+=("--archived")
+    flags+=("--children")
+    flags+=("--db=")
+    two_word_flags+=("--db")
+    flags+=("--dir=")
+    two_word_flags+=("--dir")
+    flags+=("--json")
+    flags+=("--max=")
+    two_word_flags+=("--max")
+    two_word_flags+=("-n")
+    flags+=("--picker=")
+    two_word_flags+=("--picker")
+    flags+=("--projects")
+
+    must_have_one_flag=()
+    must_have_one_noun=()
+    noun_aliases=()
+}
+
 _ocrecent_doctor()
 {
     last_command="ocrecent_doctor"
@@ -442,6 +511,8 @@ _ocrecent_last()
     flags_with_completion=()
     flags_completion=()
 
+    flags+=("--launch")
+    local_nonpersistent_flags+=("--launch")
     flags+=("--all")
     flags+=("--archived")
     flags+=("--children")
@@ -544,6 +615,8 @@ _ocrecent_pick()
     flags_with_completion=()
     flags_completion=()
 
+    flags+=("--launch")
+    local_nonpersistent_flags+=("--launch")
     flags+=("--all")
     flags+=("--archived")
     flags+=("--children")
@@ -707,6 +780,7 @@ _ocrecent_root_command()
     command_aliases=()
 
     commands=()
+    commands+=("config")
     commands+=("doctor")
     commands+=("install")
     commands+=("last")
@@ -736,6 +810,8 @@ _ocrecent_root_command()
     flags+=("--dir=")
     two_word_flags+=("--dir")
     flags+=("--json")
+    flags+=("--launch")
+    local_nonpersistent_flags+=("--launch")
     flags+=("--max=")
     two_word_flags+=("--max")
     two_word_flags+=("-n")
