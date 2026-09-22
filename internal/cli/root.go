@@ -22,12 +22,12 @@ type CmdParams struct {
 func NewRoot(params *CmdParams) *cobra.Command {
 	root := &cobra.Command{
 		Use:           "ocrecent",
-		Short:         "Resume recent OpenCode sessions after a reboot",
+		Short:         "List recent OpenCode sessions after a reboot",
 		Args:          cobra.NoArgs,
 		SilenceErrors: true,
 		SilenceUsage:  true,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			if params.InTTY {
+			if launchFlag(cmd) {
 				return runPick(params, cmd)
 			}
 			return runList(params, cmd)
@@ -44,6 +44,7 @@ func NewRoot(params *CmdParams) *cobra.Command {
 	pf.String("picker", params.Cfg.Picker, "picker binary or auto")
 	pf.String("dir", "", "only sessions in this directory (or descendants)")
 	pf.StringArray("db", nil, "extra database path (repeatable)")
+	root.Flags().Bool("launch", false, "launch the selected session instead of listing it")
 
 	root.AddCommand(palette(params)...)
 	return root
@@ -77,5 +78,10 @@ func projectsFlag(cmd *cobra.Command) bool {
 
 func pickerFlag(cmd *cobra.Command) string {
 	v, _ := cmd.Flags().GetString("picker")
+	return v
+}
+
+func launchFlag(cmd *cobra.Command) bool {
+	v, _ := cmd.Flags().GetBool("launch")
 	return v
 }

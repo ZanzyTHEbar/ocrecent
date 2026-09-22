@@ -35,13 +35,16 @@ Optional runtime programs are used only when their feature is requested:
 ## Usage
 
 ```sh
-ocrecent                         # pick in a TTY; list otherwise
+ocrecent                         # list recent sessions
+ocrecent --launch                # pick and launch a session
 ocrecent list                    # recent sessions
 ocrecent projects                # collapse sessions by project
-ocrecent pick --projects         # pick a project and resume it
+ocrecent pick                    # list sessions or projects
+ocrecent pick --launch           # pick and launch a session or project
 ocrecent resume 1                # resume a ranked session by index
 ocrecent resume ses_...          # resume by session ID
-ocrecent last                    # resume the newest session
+ocrecent last                    # list the newest session
+ocrecent last --launch           # launch the newest session
 ocrecent print ses_...           # print the resume command
 ocrecent notify                  # show the notification actions
 ocrecent doctor                  # diagnose data and desktop integration
@@ -58,11 +61,14 @@ Common flags:
 --dir DIR         include DIR and descendants only
 --picker NAME     choose a picker or use auto detection
 --db PATH         add a database path; repeatable
+--launch          launch instead of listing (root, pick, and last)
 ```
 
 `resume` accepts a one-based index from the current filtered list or any
-session ID in the filtered store. A TTY replaces the current process with
-OpenCode. Without a TTY, `ocrecent` starts the configured terminal.
+session ID in the filtered store and always launches it. The root command,
+`pick`, and `last` list by default; add `--launch` to start a session. A TTY
+replaces the current process with OpenCode. Without a TTY, `ocrecent` starts
+the configured terminal.
 
 ## Configuration
 
