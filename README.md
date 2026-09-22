@@ -1,6 +1,8 @@
 # ocrecent
 
-Recover the OpenCode projects you were using before a reboot.
+Often forget the session name for your multiple opencode sessions? 
+
+Worry no more.
 
 `ocrecent` reads OpenCode's current SQLite store, finds root sessions across
 projects, ranks them by `time_updated`, and opens the selected session in the
