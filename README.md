@@ -51,6 +51,22 @@ ocrecent doctor                  # diagnose data and desktop integration
 ocrecent config set picker fzf   # persist a config value
 ```
 
+## CLI Demo
+
+![ocrecent CLI demo](docs/assets/ocrecent-cli-demo.gif)
+
+Recorded locally from a fixed-size `tmux` PTY against the deterministic
+`docs/assets/ocrecent-demo.sql` SQLite fixture and rendered with ImageMagick.
+To reproduce the interaction, build `ocrecent`, seed the fixture, and run:
+
+```sh
+export HOME=/home/demo OPENCODE_DATA="$PWD/docs/assets"
+sqlite3 demo.db < docs/assets/ocrecent-demo.sql
+ocrecent --db demo.db --all
+ocrecent --db demo.db --projects --all
+ocrecent --db demo.db print 1
+```
+
 Common flags:
 
 ```text
