@@ -1,0 +1,97 @@
+.TH OCRECENT 1 "September 2026" "ocrecent 0.1.0" "User Commands"
+.SH NAME
+ocrecent \- resume recent OpenCode sessions after a reboot
+.SH SYNOPSIS
+.B ocrecent
+[\fIflags\fR]
+.br
+.B ocrecent
+\fIcommand\fR [\fIargs\fR] [\fIflags\fR]
+.SH DESCRIPTION
+.B ocrecent
+reads the OpenCode SQLite store, ranks sessions by update time, and hands
+the newest ones to a picker, a notification, or a direct resume. With no
+command and a TTY it opens the picker; otherwise it lists.
+.PP
+Resume runs
+.B opencode <directory> \-\-session <id>
+either in-place (TTY) or inside the configured terminal.
+.SH COMMANDS
+.TP
+.B list
+List recent sessions.
+.TP
+.B projects
+List recent projects (sessions collapsed by worktree).
+.TP
+.B pick
+Pick a session with the picker and resume it.
+.TP
+.B resume <id|index>
+Resume a session by id or listing index.
+.TP
+.B last
+Resume the most recent session.
+.TP
+.B print <id|index>
+Print the resume command for a session.
+.TP
+.B notify
+Show a notification with pick/projects/last actions.
+.TP
+.B install
+Install user systemd units and XDG autostart entry.
+.TP
+.B uninstall
+Remove them.
+.TP
+.B doctor
+Diagnose store, picker, and environment.
+.SH FLAGS
+.TP
+.BI \-n ", " \-\-max " N"
+Maximum number of rows (default 8).
+.TP
+.B \-\-all
+Disable the row limit.
+.TP
+.B \-\-children
+Include subagent (child) sessions.
+.TP
+.B \-\-archived
+Include archived sessions.
+.TP
+.B \-\-json
+Emit JSON on stdout.
+.TP
+.B \-\-projects
+Project grain instead of sessions.
+.TP
+.BI \-\-picker " BIN"
+Picker binary or "auto".
+.TP
+.BI \-\-dir " DIR"
+Only sessions in DIR (or descendants).
+.TP
+.BI \-\-db " PATH"
+Extra database path (repeatable).
+.SH ENVIRONMENT
+.TP
+.B OPENCODE_DATA
+OpenCode data root (containing opencode.db).
+.TP
+.B OCRECENT_N
+Row limit override.
+.TP
+.B OCRECENT_PICKER
+Picker override.
+.TP
+.B OCRECENT_TERMINAL
+Terminal override.
+.SH FILES
+.I $XDG_CONFIG_HOME/ocrecent/config.toml
+\- flat key = value configuration (n, picker, terminal, children, archived,
+notify_urgency).
+.SH EXIT STATUS
+0 on success, 1 on usage errors or not-found, 2 when the store is
+unreadable, 130 when the picker is cancelled.
