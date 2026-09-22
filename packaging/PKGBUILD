@@ -1,6 +1,6 @@
 # Maintainer: ZanzyTHEbar <oc@zanzythebar.dev>
 pkgname=ocrecent
-pkgver=0.2.0
+pkgver=0.2.1
 pkgrel=1
 pkgdesc="Resume recent OpenCode sessions after a reboot"
 arch=('x86_64' 'aarch64')
@@ -22,9 +22,9 @@ optdepends=(
   'opencode-bin: the editor being resumed'
 )
 makedepends=('go>=1.26')
-source_commit=4602378e501e29e5c916149eba1799f95d233842
+source_commit=9a0cbd6a5ab3cd08d4900a923b04823dee0752bf
 source=("$pkgname-$pkgver.tar.gz::https://github.com/ZanzyTHEbar/ocrecent/archive/$source_commit.tar.gz")
-sha256sums=('ebc7b35219262a130dc4010fab524384dd6107be3ef814821e7f0374db51ed22')
+sha256sums=('4fc1d2f3f41243200714f6ecf56a069370186ca8c35e814c7511a42e84fa94b0')
 
 build() {
   cd "$srcdir/$pkgname-$source_commit"
