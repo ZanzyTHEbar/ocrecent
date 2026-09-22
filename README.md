@@ -124,6 +124,10 @@ go vet ./...
 go build ./...
 ```
 
+Pushes to `main` using Conventional Commits are released automatically. Each
+release includes a changelog, Linux `amd64` and `arm64` archives, and SHA-256
+checksums on GitHub.
+
 The store tests use SQLite fixtures and do not require a live OpenCode
 process. Exit codes are `0` for success, `1` for usage or not-found, `2` for
 an unreadable store, and `130` when the picker is cancelled.
