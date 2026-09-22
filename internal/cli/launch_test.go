@@ -145,7 +145,7 @@ func TestPickListsUnlessLaunchRequested(t *testing.T) {
 				}
 				return
 			}
-			if !strings.Contains(out, "ses_new") || picker.pickCalls != 0 || len(resumer.ids) != 0 {
+			if !strings.Contains(out, "ses_new") || picker.pickCalls != 1 || len(resumer.ids) != 0 {
 				t.Fatalf("pick should list without launching: output=%q picks=%d resumes=%v", out, picker.pickCalls, resumer.ids)
 			}
 		})

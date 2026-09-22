@@ -219,6 +219,23 @@ func TestPickProjectsGrain(t *testing.T) {
 	}
 }
 
+func TestPickSessionDoesNotResume(t *testing.T) {
+	store := fakeStore{
+		paths: []string{"/a.db"},
+		dbs:   map[string][]model.Session{"/a.db": {sess("ses_pick", 100)}},
+	}
+	r := &fakeResumer{}
+	app := New(store, fakePicker{bin: "/bin/fzf", id: "ses_pick"}, fakeNotifier{}, r)
+
+	s, err := app.PickSession(model.Filter{}, 8, "auto", false)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if s.ID != "ses_pick" || len(r.ids) != 0 {
+		t.Fatalf("picked session was not returned without resuming: session=%+v resumes=%v", s, r.ids)
+	}
+}
+
 func TestPickEmptyStore(t *testing.T) {
 	store := fakeStore{paths: []string{"/a.db"}, dbs: map[string][]model.Session{}}
 	app := New(store, fakePicker{}, fakeNotifier{}, &fakeResumer{})

@@ -6,12 +6,13 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/ZanzyTHEbar/ocrecent/internal/format"
+	"github.com/ZanzyTHEbar/ocrecent/internal/model"
 )
 
 func newPickCmd(p *CmdParams) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "pick",
-		Short: "List sessions, or pick and launch with --launch",
+		Short: "Pick a session, or launch it with --launch",
 		Args:  cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return runPick(p, cmd)
@@ -22,11 +23,24 @@ func newPickCmd(p *CmdParams) *cobra.Command {
 }
 
 func runPick(p *CmdParams, cmd *cobra.Command) error {
-	if !launchFlag(cmd) {
-		return runList(p, cmd)
-	}
 	f := filterFromFlags(cmd)
-	return p.App.Pick(f.toModel(), nFromFlags(cmd), pickerFlag(cmd), projectsFlag(cmd), p.InTTY)
+	if launchFlag(cmd) {
+		return p.App.Pick(f.toModel(), nFromFlags(cmd), pickerFlag(cmd), projectsFlag(cmd), p.InTTY)
+	}
+	s, err := p.App.PickSession(f.toModel(), nFromFlags(cmd), pickerFlag(cmd), projectsFlag(cmd))
+	if err != nil {
+		return err
+	}
+	if jsonFlag(cmd) {
+		out, err := format.JSONRows([]model.Session{s}, nil)
+		if err != nil {
+			return err
+		}
+		fmt.Fprintln(p.Stdout, out)
+		return nil
+	}
+	fmt.Fprintln(p.Stdout, format.SessionTable([]model.Session{s}, home(), p.App.Now()))
+	return nil
 }
 
 func newResumeCmd(p *CmdParams) *cobra.Command {

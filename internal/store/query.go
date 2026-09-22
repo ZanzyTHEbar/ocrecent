@@ -111,6 +111,10 @@ WHERE %s`,
 		s.ParentID = parentID.String
 		s.Worktree = wt.String
 		s.ProjectName = name.String
+		if s.Worktree != "" && s.Directory != "" && !within(s.Worktree, s.Directory) {
+			s.Worktree = ""
+			s.ProjectName = ""
+		}
 		sessions = append(sessions, s)
 	}
 	if err := rows.Err(); err != nil {
@@ -121,6 +125,12 @@ WHERE %s`,
 		sessions = filterDir(sessions, filepath.Clean(f.Dir))
 	}
 	return sessions, nil
+}
+
+func within(root, path string) bool {
+	root = filepath.Clean(root)
+	path = filepath.Clean(path)
+	return root == path || strings.HasPrefix(path, root+string(os.PathSeparator))
 }
 
 func filterDir(sessions []model.Session, dir string) []model.Session {

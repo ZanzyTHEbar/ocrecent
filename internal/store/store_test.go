@@ -172,6 +172,21 @@ func TestListProjectJoin(t *testing.T) {
 	}
 }
 
+func TestListClearsUnrelatedProjectWorktree(t *testing.T) {
+	db := openRO(t, seed(t, fullSchema, []string{
+		`INSERT INTO session (id, parent_id, title, time_created, time_updated, time_archived, directory, path, project_id)
+			VALUES ('ses_global', NULL, 'global', 100, 200, 0, '/home/u/other', '', 'global')`,
+		`INSERT INTO project (id, name, worktree) VALUES ('global', '/mnt/current', '/mnt/current')`,
+	}))
+	sessions, err := store.List(db, model.Filter{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(sessions) != 1 || sessions[0].Worktree != "" || sessions[0].ProjectName != "" {
+		t.Fatalf("unrelated project metadata leaked into session: %+v", sessions)
+	}
+}
+
 func TestListMissingProjectTable(t *testing.T) {
 	schema := `CREATE TABLE session (
   id TEXT PRIMARY KEY, parent_id TEXT, title TEXT,

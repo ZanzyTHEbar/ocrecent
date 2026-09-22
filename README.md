@@ -39,7 +39,7 @@ ocrecent                         # list recent sessions
 ocrecent --launch                # pick and launch a session
 ocrecent list                    # recent sessions
 ocrecent projects                # collapse sessions by project
-ocrecent pick                    # list sessions or projects
+ocrecent pick                    # pick without launching
 ocrecent pick --launch           # pick and launch a session or project
 ocrecent resume 1                # resume a ranked session by index
 ocrecent resume ses_...          # resume by session ID

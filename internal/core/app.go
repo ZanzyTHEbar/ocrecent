@@ -133,51 +133,59 @@ func (a *App) ResumeLast(f model.Filter, inTTY bool) error {
 // Pick resolves the picker, presents sessions or projects, and resumes the
 // selection.
 func (a *App) Pick(f model.Filter, n int, pickerExplicit string, projectsGrain, inTTY bool) error {
+	s, err := a.PickSession(f, n, pickerExplicit, projectsGrain)
+	if err != nil {
+		return err
+	}
+	return a.Resumer.Resume(s.Directory, s.ID, inTTY)
+}
+
+func (a *App) PickSession(f model.Filter, n int, pickerExplicit string, projectsGrain bool) (model.Session, error) {
 	lines := []string{}
-	dirs := map[string]string{}
+	sessions := map[string]model.Session{}
 	home := os.Getenv("HOME")
 	now := a.Now()
 	if projectsGrain {
 		ps, err := a.Projects(f, n)
 		if err != nil {
-			return err
+			return model.Session{}, err
 		}
 		if len(ps) == 0 {
-			return faults.New(model.CodeNotFound, "no projects found")
+			return model.Session{}, faults.New(model.CodeNotFound, "no projects found")
 		}
 		for _, p := range ps {
 			lines = append(lines, picker.Line(p.Name, format.RelTime(now, p.UpdatedMS),
 				format.HomePath(home, p.Key), p.ID))
-			dirs[p.ID] = p.Directory
+			sessions[p.ID] = model.Session{ID: p.ID, Title: p.Name, Directory: p.Directory}
 		}
 	} else {
 		ss, err := a.Sessions(f, n)
 		if err != nil {
-			return err
+			return model.Session{}, err
 		}
 		if len(ss) == 0 {
-			return faults.New(model.CodeNotFound, "no sessions found")
+			return model.Session{}, faults.New(model.CodeNotFound, "no sessions found")
 		}
 		for _, s := range ss {
 			lines = append(lines, picker.Line(s.Title, format.RelTime(now, s.UpdatedMS),
 				format.HomePath(home, s.Directory), s.ID))
-			dirs[s.ID] = s.Directory
+			sessions[s.ID] = s
 		}
 	}
 
 	bin, err := a.Picker.Resolve(pickerExplicit)
 	if err != nil {
-		return err
+		return model.Session{}, err
 	}
 	id, err := a.Picker.Pick(bin, lines)
 	if err != nil {
-		return err
+		return model.Session{}, err
 	}
-	dir, ok := dirs[id]
+	s, ok := sessions[id]
 	if !ok {
-		return faults.New(model.CodeNotFound, "picked session not found", "id", id)
+		return model.Session{}, faults.New(model.CodeNotFound, "picked session not found", "id", id)
 	}
-	return a.Resumer.Resume(dir, id, inTTY)
+	return s, nil
 }
 
 // Notify posts the notification and returns the chosen action key.
