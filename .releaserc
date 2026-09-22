@@ -38,7 +38,7 @@
     [
       "@semantic-release/exec",
       {
-        "prepareCmd": "./scripts/build-release.sh ${nextRelease.version}",
+        "prepareCmd": "./scripts/update-package.sh ${nextRelease.version} && ./scripts/build-release.sh ${nextRelease.version}",
         "publishCmd": "test -s dist/checksums.txt"
       }
     ],
@@ -55,7 +55,7 @@
     [
       "@semantic-release/git",
       {
-        "assets": ["CHANGELOG.md"],
+        "assets": ["CHANGELOG.md", "packaging/PKGBUILD"],
         "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
       }
     ]
