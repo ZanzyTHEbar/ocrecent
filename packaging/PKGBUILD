@@ -28,10 +28,10 @@ sha256sums=('804bbb43bec379e96646514e04803eeeff74e2100d14640a2dcaf108ffba4630')
 
 build() {
   cd "$srcdir/$pkgname-$source_commit"
-  CGO_ENABLED=0 go build -trimpath \
+  CGO_ENABLED=0 go build -buildvcs=false -trimpath \
     -ldflags "-s -w -X main.version=$pkgver" \
     -o ocrecent ./cmd/ocrecent
-  go run ./cmd/gencompletions ./completions
+  go run -buildvcs=false ./cmd/gencompletions ./completions
 }
 
 package() {
