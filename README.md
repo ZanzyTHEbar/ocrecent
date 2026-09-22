@@ -145,6 +145,12 @@ go vet ./...
 go build ./...
 ```
 
+```sh
+make          # package with makepkg, or build a raw binary without it
+make install  # install the package, or raw files without makepkg
+make clean    # remove generated build and package artifacts
+```
+
 Pushes to `main` using Conventional Commits are released automatically. Each
 release includes a changelog, Linux `amd64` and `arm64` archives, and SHA-256
 checksums on GitHub. Release preparation also refreshes `packaging/PKGBUILD`
