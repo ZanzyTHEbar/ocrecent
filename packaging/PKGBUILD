@@ -1,0 +1,44 @@
+# Maintainer: ZanzyTHEbar <oc@zanzythebar.dev>
+pkgname=ocrecent
+pkgver=0.1.0
+pkgrel=1
+pkgdesc="Resume recent OpenCode sessions after a reboot"
+arch=('x86_64' 'aarch64')
+url="https://github.com/ZanzyTHEbar/ocrecent"
+license=('MIT')
+depends=('glibc')
+optdepends=(
+  'fuzzel: Wayland picker'
+  'wofi: Wayland picker'
+  'rofi: X11/Wayland picker'
+  'tofi: Wayland picker'
+  'bemenu: Wayland picker'
+  'dmenu: X11 picker'
+  'fzf: fallback picker'
+  'libnotify: notifications'
+  'foot: terminal for resume outside a TTY'
+  'kitty: terminal for resume outside a TTY'
+  'alacritty: terminal for resume outside a TTY'
+  'opencode-bin: the editor being resumed'
+)
+makedepends=('go>=1.26')
+source_commit=7084d0ecc601899cff7f461add2fae25ba9bc43d
+source=("$pkgname-$pkgver.tar.gz::https://github.com/ZanzyTHEbar/ocrecent/archive/$source_commit.tar.gz")
+sha256sums=('804bbb43bec379e96646514e04803eeeff74e2100d14640a2dcaf108ffba4630')
+
+build() {
+  cd "$srcdir/$pkgname-$source_commit"
+  CGO_ENABLED=0 go build -trimpath \
+    -ldflags "-s -w -X main.version=$pkgver" \
+    -o ocrecent ./cmd/ocrecent
+  go run ./cmd/gencompletions ./completions
+}
+
+package() {
+  cd "$srcdir/$pkgname-$source_commit"
+  install -Dm755 ocrecent "$pkgdir/usr/bin/ocrecent"
+  install -Dm644 packaging/ocrecent.1 "$pkgdir/usr/share/man/man1/ocrecent.1"
+  install -Dm644 completions/bash/ocrecent "$pkgdir/usr/share/bash-completion/completions/ocrecent"
+  install -Dm644 completions/zsh/_ocrecent "$pkgdir/usr/share/zsh/site-functions/_ocrecent"
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}
